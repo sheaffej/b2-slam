@@ -1,5 +1,3 @@
-# FROM ros:melodic-ros-core-bionic
-# FROM ros:melodic-ros-base-bionic
 FROM ros:melodic-perception-bionic
 
 SHELL [ "bash", "-c"]
@@ -22,6 +20,8 @@ RUN cd ${ROS_WS} \
 && src/cartographer/scripts/install_proto3.sh \
 && rm -Rf protobuf
 
+COPY b2_slam ${ROS_WS}/src/b2_slam
+
 RUN cd ${ROS_WS} \
 && apt update \
 && rosdep update \
@@ -32,7 +32,7 @@ RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
 && cd ${ROS_WS}/src \
 && catkin_init_workspace \
 && cd ${ROS_WS} \
-&& catkin_make_isolated --install --use-ninja
+&& catkin_make_isolated --use-ninja
 
 WORKDIR /root
 
