@@ -6,9 +6,9 @@ options = {
   trajectory_builder = TRAJECTORY_BUILDER,
   map_frame = "map",
   tracking_frame = "base_link",
-  published_frame = "base_link",
+  published_frame = "odom",
   odom_frame = "odom",
-  provide_odom_frame = true,
+  provide_odom_frame = false,
   publish_frame_projected_to_2d = false,
   -- use_pose_extrapolator = true,
   use_odometry = true,
@@ -30,7 +30,42 @@ options = {
 }
 
 MAP_BUILDER.use_trajectory_builder_2d = true
-TRAJECTORY_BUILDER_2D.num_accumulated_range_data = 10
 TRAJECTORY_BUILDER_2D.use_imu_data = false
+TRAJECTORY_BUILDER_2D.num_accumulated_range_data = 1.
+TRAJECTORY_BUILDER_2D.submaps.num_range_data = 100.  -- Default 90.
+
+-- TRAJECTORY_BUILDER_2D.max_range = 3.
+-- TRAJECTORY_BUILDER_2D.missing_data_ray_length = 2.5
+-- TRAJECTORY_BUILDER_2D.ceres_scan_matcher.occupied_space_weight = 5
+-- TRAJECTORY_BUILDER_2D.ceres_scan_matcher.translation_weight = 100.
+-- TRAJECTORY_BUILDER_2D.ceres_scan_matcher.rotation_weight = 40.
+
+
+TRAJECTORY_BUILDER_2D.max_range = 3.5
+TRAJECTORY_BUILDER_2D.missing_data_ray_length = 3.0
+TRAJECTORY_BUILDER_2D.ceres_scan_matcher.occupied_space_weight = 10.
+TRAJECTORY_BUILDER_2D.ceres_scan_matcher.translation_weight = 200.
+TRAJECTORY_BUILDER_2D.ceres_scan_matcher.rotation_weight = 10.
+
+
+
+TRAJECTORY_BUILDER_2D.motion_filter.max_time_seconds = 0.1
+
+--Global Slam
+--Setting POSE_GRAPH.optimize_every_n_nodes to 0 is a handy way
+--to disable global SLAM and concentrate on the behavior of local SLAM.
+--This is usually one of the first thing to do to tune Cartographer.
+POSE_GRAPH.optimize_every_n_nodes = 0. --90 default
+
+-- POSE_GRAPH.optimization_problem.odometry_rotation_weight = 10
+-- POSE_GRAPH.optimization_problem.odometry_translation_weight = 1.
+-- POSE_GRAPH.optimization_problem.fixed_frame_pose_translation_weight = 1e-1
+-- POSE_GRAPH.optimization_problem.fixed_frame_pose_rotation_weight = 1e-1
+
+POSE_GRAPH.optimization_problem.odometry_rotation_weight = 10
+POSE_GRAPH.optimization_problem.odometry_translation_weight = 100.
+POSE_GRAPH.optimization_problem.fixed_frame_pose_translation_weight = 1e-1
+POSE_GRAPH.optimization_problem.fixed_frame_pose_rotation_weight = 1e-1
+
 
 return options
