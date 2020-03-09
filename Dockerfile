@@ -1,5 +1,6 @@
 FROM ros:melodic-perception-bionic
 
+WORKDIR /root
 SHELL [ "bash", "-c"]
 ENV ROS_WS /ros
 
@@ -16,11 +17,18 @@ RUN mkdir -p ${ROS_WS} \
 && wstool merge -t src https://raw.githubusercontent.com/googlecartographer/cartographer_ros/master/cartographer_ros.rosinstall \
 && wstool update -t src
 
+# Patch Cartographer's map_by_time.h
+COPY patches patches
+RUN patch ${ROS_WS}/src/cartographer/cartographer/sensor/map_by_time.h ./patches/map_by_time.patch
+
 RUN cd ${ROS_WS} \
 && src/cartographer/scripts/install_proto3.sh \
 && rm -Rf protobuf
 
 COPY b2_slam ${ROS_WS}/src/b2_slam
+
+RUN cd ${ROS_WS}/src \
+&& git clone https://github.com/sheaffej/b2_description.git
 
 RUN cd ${ROS_WS} \
 && apt update \
@@ -32,9 +40,8 @@ RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
 && cd ${ROS_WS}/src \
 && catkin_init_workspace \
 && cd ${ROS_WS} \
-&& catkin_make_isolated --use-ninja
+&& catkin_make_isolated --use-ninja 
 
-WORKDIR /root
 
 COPY demos .
 

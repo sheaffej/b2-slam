@@ -1,0 +1,10 @@
+<launch>
+
+    <arg name="bag_filename" />
+
+    <param name="/use_sim_time" value="true" />
+
+    <include file="$(find b2_slam)/launch/b2_2d.launch" />
+
+    <node name="playbag" pkg="rosbag" type="play" args="--clock $(arg bag_filename)" />
+</launch>
