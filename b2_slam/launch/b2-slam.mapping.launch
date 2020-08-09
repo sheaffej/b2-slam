@@ -1,12 +1,15 @@
 <launch>
 
+  <arg name="config" default="b2_2d.lua" />
+
   <node name="cartographer_node" pkg="cartographer_ros"
         type="cartographer_node" args="
         -configuration_directory $(find b2_slam)/configuration_files
-        -configuration_basename b2_2d.lua"
+        -configuration_basename $(arg config)"
         output="screen"
         required="true" >
     <remap from="scan" to="camera/scan" />
+    <remap from="points2" to="camera/depth/color/points" />
   </node>
 
   <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
