@@ -2,3 +2,7 @@
 docker_build.sh
 run/
 Dockerfile
+README.md
+LICENSE
+.gitignore
+demos
