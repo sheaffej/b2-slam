@@ -43,7 +43,7 @@ RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
 && catkin_make_isolated --use-ninja 
 
 
-COPY demos .
+COPY demos demos
 
 COPY ./entrypoint.sh /
 ENTRYPOINT [ "/entrypoint.sh" ]
